@@ -36,10 +36,6 @@ export const authSlice = createSlice({
     builder.addCase(SignUpThunk.rejected, state => {
       state.status = 'failed';
     });
-    // builder.addCase(logoutThunk.fulfilled, state => {
-    //   state.token = null;
-    //   state.status = 'success';
-    // });
   },
 });
 
