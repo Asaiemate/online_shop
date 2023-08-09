@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, {G, Path} from 'react-native-svg';
 
-export const User = ({size = 100}) => {
+export const User = ({size = 24}) => {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <G

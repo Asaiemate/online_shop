@@ -4,15 +4,19 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAppDispatch} from '../../redux/store';
 import {Controller, useForm} from 'react-hook-form';
 import {Field} from '../../components/Field';
-import {User} from '../../icons/user';
-import {Password} from '../../icons/password';
+import {User} from '../../icons';
+import {Password} from '../../icons';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../navigation/StackParamList';
+
+type Props = NativeStackScreenProps<RootStackParamList, 'SignInScreen'>;
 
 interface IFormProps {
   username: string;
   password: string;
 }
 
-export const SignInScreen = () => {
+export const SignInScreen = ({navigation}: Props) => {
   const dispatch = useAppDispatch;
 
   const {control, handleSubmit} = useForm<IFormProps>({
@@ -24,66 +28,93 @@ export const SignInScreen = () => {
 
   const submit = () => {};
 
-  const goToSignUp = () => {};
-
   return (
-    <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
-      <Text>Welcome Back</Text>
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text style={styles.title}>Welcome Back</Text>
 
-      <Text>Login to continue</Text>
+        <Text style={styles.title}>Login to continue</Text>
+      </View>
 
-      <Controller
-        control={control}
-        name="username"
-        rules={{
-          required: {
-            value: true,
-            message: 'Required field',
-          },
-        }}
-        render={({field: {value, onChange}}) => (
-          <Field
-            label="Username"
-            value={value}
-            onChangeText={onChange}
-            icon={<User />}
-            placeholder="Username"
-          />
-        )}
-      />
+      <View>
+        <Controller
+          control={control}
+          name="username"
+          rules={{
+            required: {
+              value: true,
+              message: 'Required field',
+            },
+          }}
+          render={({field: {value, onChange}, fieldState: {error}}) => (
+            <Field
+              containerStyle={styles.field}
+              label="Username"
+              value={value}
+              onChangeText={onChange}
+              icon={<User />}
+              placeholder="Username"
+              error={error?.message}
+            />
+          )}
+        />
 
-      <Controller
-        control={control}
-        name="password"
-        rules={{
-          required: {
-            value: true,
-            message: 'Required field',
-          },
-        }}
-        render={({field: {value, onChange}}) => (
-          <Field
-            label="Password"
-            value={value}
-            onChangeText={onChange}
-            icon={<Password />}
-            placeholder="Password"
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="password"
+          rules={{
+            required: {
+              value: true,
+              message: 'Required field',
+            },
+          }}
+          render={({field: {value, onChange}, fieldState: {error}}) => (
+            <Field
+              containerStyle={styles.field}
+              label="Password"
+              value={value}
+              onChangeText={onChange}
+              icon={<Password />}
+              placeholder="Password"
+              password
+              error={error?.message}
+            />
+          )}
+        />
+      </View>
 
-      <Button title="Sign in" onPress={handleSubmit(submit)} />
+      <View style={styles.footer}>
+        <Button title="Sign in" onPress={handleSubmit(submit)} />
 
-      <View style={styles.signUp}>
-        <Text>Don't have an account?</Text>
-        <Text onPress={goToSignUp}>Sign up</Text>
+        <View style={styles.signUpWrapper}>
+          <Text>Don't have an account?</Text>
+          <Text
+            onPress={() => navigation.navigate('SignUpScreen')}
+            style={styles.signUp}>
+            Sign up
+          </Text>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  signUp: {
+  container: {
+    backgroundColor: 'white',
+    flex: 1,
+    justifyContent: 'space-around',
+  },
+  title: {textAlign: 'center', fontSize: 24, marginTop: 24},
+  field: {
+    marginTop: 16,
+  },
+  footer: {marginHorizontal: 16},
+  signUpWrapper: {
+    marginTop: 8,
     flexDirection: 'row',
+  },
+  signUp: {
+    fontWeight: '800',
   },
 });

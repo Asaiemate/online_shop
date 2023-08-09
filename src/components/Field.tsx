@@ -4,16 +4,19 @@ import {
   Text,
   TextInput,
   TextInputProps,
+  TouchableOpacity,
   View,
-  ViewProps,
+  ViewStyle,
 } from 'react-native';
-import {Eye} from '../icons/Eye';
+import {Eye} from '../icons';
+import React from 'react';
 
 interface Props extends TextInputProps {
   label: string;
-  containerStyle?: StyleProp<ViewProps>;
+  containerStyle?: StyleProp<ViewStyle>;
   icon: React.ReactNode;
   password?: boolean;
+  error?: string;
 }
 
 export const Field = ({
@@ -21,16 +24,28 @@ export const Field = ({
   containerStyle,
   icon,
   password,
+  error,
   ...rest
 }: Props) => {
+  const [secureTextEntry, setSecureTextEntry] = React.useState<boolean>(false);
+
   return (
-    <View style={[containerStyle, styles.containerStyle]}>
+    <View style={[styles.containerStyle, containerStyle]}>
       <Text>{label}</Text>
-      <View style={styles.input}>
+      <View style={styles.inputWrapper}>
         {icon}
-        <TextInput {...rest} />
-        {password === undefined ? null : <Eye close={password} />}
+        <TextInput
+          {...rest}
+          style={styles.input}
+          secureTextEntry={secureTextEntry}
+        />
+        {password === undefined ? null : (
+          <TouchableOpacity onPress={() => setSecureTextEntry(pre => !pre)}>
+            <Eye close={secureTextEntry} />
+          </TouchableOpacity>
+        )}
       </View>
+      {error && <Text style={styles.error}>{error}</Text>}
     </View>
   );
 };
@@ -39,8 +54,18 @@ const styles = StyleSheet.create({
   containerStyle: {
     marginHorizontal: 16,
   },
-  input: {
+  inputWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    marginTop: 16,
+    borderColor: '#f00',
+    borderWidth: 1,
+    borderRadius: 20,
+  },
+  input: {flex: 1},
+  error: {
+    color: 'red',
+    marginTop: 8,
   },
 });

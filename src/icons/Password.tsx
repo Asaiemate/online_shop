@@ -1,14 +1,15 @@
 import * as React from 'react';
 import Svg, {G, Defs, Path, Rect} from 'react-native-svg';
 
-export const Password = ({size = 100}) => {
+export const Password = ({size = 24}) => {
   return (
     <Svg
       width={size}
       height={size}
       viewBox="0 0 48 48"
       stroke="#000"
-      strokeWidth={2.256}>
+      strokeWidth={3}
+      fill="none">
       <G id="SVGRepo_iconCarrier">
         <Defs></Defs>
         <Path d="M24 25.28a3.26 3.26 0 00-1.64 6.07V36h3.32v-4.65a3.28 3.28 0 001.61-2.8v0A3.27 3.27 0 0024 25.28z" />
