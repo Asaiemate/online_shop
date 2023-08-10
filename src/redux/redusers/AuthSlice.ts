@@ -20,8 +20,13 @@ export const authSlice = createSlice({
       state.status = 'loading';
     });
     builder.addCase(SignInThunk.fulfilled, (state, {payload}) => {
-      state.token = payload.token;
-      state.status = 'success';
+      console.log('payload.token', payload.token);
+      if (payload.token) {
+        state.token = payload.token;
+        state.status = 'success';
+      } else {
+        state.status = 'failed';
+      }
     });
     builder.addCase(SignInThunk.rejected, state => {
       state.status = 'failed';

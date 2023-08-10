@@ -1,13 +1,15 @@
-import React from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useAppDispatch} from '../../redux/store';
+import {useAppDispatch, useAppSelector} from '../../redux/store';
 import {Controller, useForm} from 'react-hook-form';
 import {Field} from '../../components/Field';
 import {User} from '../../icons';
 import {Password} from '../../icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/StackParamList';
+import {SignInThunk} from '../../redux/thunks/auth';
+import {NotificationContext} from '../../context/NotificationProvider';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignInScreen'>;
 
@@ -17,7 +19,10 @@ interface IFormProps {
 }
 
 export const SignInScreen = ({navigation}: Props) => {
-  const dispatch = useAppDispatch;
+  const dispatch = useAppDispatch();
+  const status = useAppSelector(state => state.auth.status);
+
+  const notification = React.useContext(NotificationContext);
 
   const {control, handleSubmit} = useForm<IFormProps>({
     defaultValues: {
@@ -26,15 +31,30 @@ export const SignInScreen = ({navigation}: Props) => {
     },
   });
 
-  const submit = () => {};
+  const submit = async (data: IFormProps) => {
+    dispatch(SignInThunk({username: data.username, password: data.password}));
+  };
+
+  useEffect(() => {
+    switch (status) {
+      case 'failed':
+        notification.setNotification({
+          title: 'Ошибка авторизации',
+          type: 'error',
+        });
+        break;
+      case 'success':
+        notification.setNotification({
+          title: 'Авторизация успешна',
+          type: 'success',
+        });
+        break;
+    }
+  }, [notification, status]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.title}>Welcome Back</Text>
-
-        <Text style={styles.title}>Login to continue</Text>
-      </View>
+      <Text style={styles.title}>{'Welcome Back \n Login to continue'}</Text>
 
       <View>
         <Controller
@@ -48,7 +68,6 @@ export const SignInScreen = ({navigation}: Props) => {
           }}
           render={({field: {value, onChange}, fieldState: {error}}) => (
             <Field
-              containerStyle={styles.field}
               label="Username"
               value={value}
               onChangeText={onChange}
@@ -87,7 +106,7 @@ export const SignInScreen = ({navigation}: Props) => {
         <Button title="Sign in" onPress={handleSubmit(submit)} />
 
         <View style={styles.signUpWrapper}>
-          <Text>Don't have an account?</Text>
+          <Text>Don't have an account? </Text>
           <Text
             onPress={() => navigation.navigate('SignUpScreen')}
             style={styles.signUp}>
@@ -105,13 +124,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
   },
-  title: {textAlign: 'center', fontSize: 24, marginTop: 24},
+  title: {textAlign: 'center', fontSize: 24, lineHeight: 40},
   field: {
     marginTop: 16,
   },
   footer: {marginHorizontal: 16},
   signUpWrapper: {
-    marginTop: 8,
+    marginTop: 16,
     flexDirection: 'row',
   },
   signUp: {
