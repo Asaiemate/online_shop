@@ -10,6 +10,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/StackParamList';
 import {SignInThunk} from '../../redux/thunks/auth';
 import {NotificationContext} from '../../context/NotificationProvider';
+import {setToken} from '../../redux/redusers/AuthSlice';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignInScreen'>;
 
@@ -21,18 +22,24 @@ interface IFormProps {
 export const SignInScreen = ({navigation}: Props) => {
   const dispatch = useAppDispatch();
   const status = useAppSelector(state => state.auth.status);
+  const token = useAppSelector(state => state.auth.token);
+
+  console.log('token', token);
 
   const notification = React.useContext(NotificationContext);
 
   const {control, handleSubmit} = useForm<IFormProps>({
     defaultValues: {
-      username: '',
-      password: '',
+      username: 'kminchelle',
+      password: '0lelplR',
     },
   });
 
   const submit = async (data: IFormProps) => {
+    dispatch(setToken());
     dispatch(SignInThunk({username: data.username, password: data.password}));
+
+    console.log('token', token);
   };
 
   useEffect(() => {

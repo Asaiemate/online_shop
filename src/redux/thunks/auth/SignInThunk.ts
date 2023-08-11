@@ -27,5 +27,5 @@ export const SignInThunk = createAsyncThunk<
   });
   const parseJSON = await response.json();
   console.log('parseJSON', JSON.stringify(parseJSON, null, 2));
-  return parseJSON.data as ResponseLoginInterface;
+  return parseJSON as ResponseLoginInterface;
 });

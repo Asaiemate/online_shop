@@ -14,6 +14,9 @@ export const authSlice = createSlice({
     clearToken: state => {
       state.token = null;
     },
+    setToken: state => {
+      state.token = '1';
+    },
   },
   extraReducers: builder => {
     builder.addCase(SignInThunk.pending, state => {
@@ -44,6 +47,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const {clearToken} = authSlice.actions;
+export const {clearToken, setToken} = authSlice.actions;
 
 export default authSlice.reducer;

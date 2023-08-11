@@ -8,6 +8,7 @@ import {Password} from '../../icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/StackParamList';
 import {RadioButton} from '../../components/RadioButton';
+import {CircleImage} from '../../components/CircleImage';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignUpScreen'>;
 
@@ -17,13 +18,11 @@ interface IFormProps {
   firstName: string;
   lastName: string;
   gender: 'Male' | 'Female';
-  imageUrl: string;
+  imageUrl: string | null;
   password: string;
 }
 
 export const SignUpScreen = ({navigation}: Props) => {
-  // const dispatch = useAppDispatch();
-
   const {control, watch, setValue, handleSubmit} = useForm<IFormProps>({
     defaultValues: {
       username: '',
@@ -37,12 +36,15 @@ export const SignUpScreen = ({navigation}: Props) => {
   });
 
   const submit = () => {};
-
+  console.log('render');
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Create account</Text>
 
-      {/* <CircleImage url={watch('imageUrl')} /> */}
+      <CircleImage
+        imageUrl={watch('imageUrl')}
+        setImageUrl={url => setValue('imageUrl', url)}
+      />
 
       <View>
         <Controller
@@ -102,11 +104,11 @@ export const SignUpScreen = ({navigation}: Props) => {
           render={({field: {value, onChange}, fieldState: {error}}) => (
             <Field
               containerStyle={styles.field}
-              label="firstName"
+              label="FirstName"
               value={value}
               onChangeText={onChange}
               icon={<User />}
-              placeholder="Username"
+              placeholder="FirstName"
               error={error?.message}
             />
           )}
@@ -151,14 +153,14 @@ export const SignUpScreen = ({navigation}: Props) => {
       </View>
 
       <View style={styles.footer}>
-        <Button title="Sign in" onPress={handleSubmit(submit)} />
+        <Button title="Sign up" onPress={handleSubmit(submit)} />
 
-        <View style={styles.signUpWrapper}>
-          <Text>Don't have an account? </Text>
+        <View style={styles.signInWrapper}>
+          <Text>Have an account already? </Text>
           <Text
-            onPress={() => navigation.navigate('SignUpScreen')}
-            style={styles.signUp}>
-            Sign up
+            onPress={() => navigation.navigate('SignInScreen')}
+            style={styles.signIn}>
+            Sign in
           </Text>
         </View>
       </View>
@@ -182,11 +184,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   footer: {marginHorizontal: 16},
-  signUpWrapper: {
+  signInWrapper: {
     marginTop: 16,
     flexDirection: 'row',
   },
-  signUp: {
+  signIn: {
     fontWeight: '800',
   },
 });

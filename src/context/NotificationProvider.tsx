@@ -3,7 +3,7 @@ import {ViewProps} from 'react-native';
 
 export interface IHeaderNotification {
   title: string;
-  type: 'error' | 'success';
+  type: 'error' | 'success' | 'warning';
 }
 
 interface Props extends ViewProps {}

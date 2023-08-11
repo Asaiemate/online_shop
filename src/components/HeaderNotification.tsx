@@ -33,20 +33,28 @@ export const HeaderNotification = () => {
     context.notification && fadeIn();
   }, [context.notification, fadeIn]);
 
-  const textColor = () => {
+  const textColor = (() => {
     switch (context.notification?.type) {
       case 'error':
-        return 'pink';
+        return {color: 'red', backgroundColor: 'pink'};
       case 'success':
-        return 'lightgreen';
+        return {color: 'green', backgroundColor: 'lightgreen'};
+      case 'warning':
+        return {color: 'gray', backgroundColor: 'lightgray'};
       default:
-        return 'lightgray';
+        return {color: 'gray', backgroundColor: 'lightgray'};
     }
-  };
+  })();
 
   return (
-    <Animated.View style={[styles.animated, {top: animValue}]}>
-      <Text style={{color: textColor()}}>{context.notification?.title}</Text>
+    <Animated.View
+      style={[
+        styles.animated,
+        {top: animValue, backgroundColor: textColor.backgroundColor},
+      ]}>
+      <Text style={{color: textColor.color}}>
+        {context.notification?.title}
+      </Text>
     </Animated.View>
   );
 };
