@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAppDispatch, useAppSelector} from '../../redux/store';
@@ -10,7 +10,6 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/StackParamList';
 import {SignInThunk} from '../../redux/thunks/auth';
 import {NotificationContext} from '../../context/NotificationProvider';
-import {setToken} from '../../redux/redusers/AuthSlice';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignInScreen'>;
 
@@ -22,10 +21,6 @@ interface IFormProps {
 export const SignInScreen = ({navigation}: Props) => {
   const dispatch = useAppDispatch();
   const status = useAppSelector(state => state.auth.status);
-  const token = useAppSelector(state => state.auth.token);
-
-  console.log('token', token);
-
   const notification = React.useContext(NotificationContext);
 
   const {control, handleSubmit} = useForm<IFormProps>({
@@ -36,13 +31,9 @@ export const SignInScreen = ({navigation}: Props) => {
   });
 
   const submit = async (data: IFormProps) => {
-    dispatch(setToken());
-    dispatch(SignInThunk({username: data.username, password: data.password}));
-
-    console.log('token', token);
-  };
-
-  useEffect(() => {
+    await dispatch(
+      SignInThunk({username: data.username, password: data.password}),
+    );
     switch (status) {
       case 'failed':
         notification.setNotification({
@@ -57,7 +48,7 @@ export const SignInScreen = ({navigation}: Props) => {
         });
         break;
     }
-  }, [notification, status]);
+  };
 
   return (
     <SafeAreaView style={styles.container}>

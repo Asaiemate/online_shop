@@ -28,9 +28,7 @@ export const SignUpThunk = createAsyncThunk<
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data),
-  })
-    .then(res => res.json())
-    .catch(error => console.log('auth error', error.message));
-
-  return response.data as ResponseLoginInterface;
+  });
+  const responseJSON = await response.json();
+  return responseJSON as ResponseLoginInterface;
 });

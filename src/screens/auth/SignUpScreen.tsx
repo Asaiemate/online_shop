@@ -9,6 +9,9 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/StackParamList';
 import {RadioButton} from '../../components/RadioButton';
 import {CircleImage} from '../../components/CircleImage';
+import {useAppDispatch, useAppSelector} from '../../redux/store';
+import {SignUpThunk} from '../../redux/thunks/auth';
+import {NotificationContext} from '../../context/NotificationProvider';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignUpScreen'>;
 
@@ -23,6 +26,10 @@ interface IFormProps {
 }
 
 export const SignUpScreen = ({navigation}: Props) => {
+  const dispatch = useAppDispatch();
+  const notification = React.useContext(NotificationContext);
+  const status = useAppSelector(state => state.auth.status);
+
   const {control, watch, setValue, handleSubmit} = useForm<IFormProps>({
     defaultValues: {
       username: '',
@@ -35,8 +42,34 @@ export const SignUpScreen = ({navigation}: Props) => {
     },
   });
 
-  const submit = () => {};
-  console.log('render');
+  const submit = async (data: IFormProps) => {
+    await dispatch(
+      SignUpThunk({
+        username: data.username,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        gender: data.gender,
+        image: data.imageUrl ?? '',
+        password: data.password,
+      }),
+    );
+    switch (status) {
+      case 'failed':
+        notification.setNotification({
+          title: 'Ошибка добавление пользователя',
+          type: 'error',
+        });
+        break;
+      case 'success':
+        notification.setNotification({
+          title: 'Учетная запись добавлена',
+          type: 'success',
+        });
+        break;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Create account</Text>
