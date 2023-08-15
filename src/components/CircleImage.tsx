@@ -123,19 +123,20 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
+    borderWidth: 1,
+    borderColor: 'lightgray',
   },
   modal: {
-    marginBottom: 0,
     justifyContent: 'flex-end',
   },
   modalContainer: {
-    // backgroundColor: 'white',
+    borderRadius: 16,
+    overflow: 'hidden',
   },
   modalItem: {
     backgroundColor: 'white',
-
     padding: 10,
-    borderRadius: 16,
-    marginBottom: 16,
+    marginBottom: 2,
+    textAlign: 'center',
   },
 });

@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
   ScrollView,
 } from 'react-native';
 import {RootStackParamList} from '../../navigation/StackParamList';
@@ -15,18 +14,9 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAppDispatch} from '../../redux/store';
 import {addProduct} from '../../redux/redusers/CartSlice';
 import {Cart} from '../../icons';
-import {CountField} from '../../components';
+import {CountField, TextWrapper} from '../../components';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ItemScreen'>;
-
-const TextWrapper = ({title, text}: {title: string; text: string}) => {
-  return (
-    <View style={styles.textWrapper}>
-      <Text>{title}</Text>
-      <Text>{text}</Text>
-    </View>
-  );
-};
 
 export const ItemScreen = (props: Props) => {
   const product = props.route.params;
@@ -80,16 +70,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  textWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 16,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 16,
-    marginTop: 16,
-  },
+
   cartButton: {
     flexDirection: 'row',
     padding: 16,
