@@ -56,5 +56,6 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
     marginHorizontal: 2,
     borderRadius: 4,
+    textAlign: 'right',
   },
 });

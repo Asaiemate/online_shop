@@ -8,7 +8,7 @@ const initialState: AuthStateInterface = {
   email: '',
   firstName: '',
   lastName: '',
-  gender: '',
+  gender: 'male',
   image: '',
   token: null,
   status: 'success',

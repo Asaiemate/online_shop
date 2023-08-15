@@ -1,52 +1,36 @@
 import React from 'react';
-import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
-import {Trash, User} from '../../icons';
-import {Password} from '../../icons';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../navigation/StackParamList';
-import {RadioButton, CircleImage, Field} from '../../components';
-
-type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
+import {Logout, User} from '../../icons';
+import {RadioButton, CircleImage, Field, Button} from '../../components';
+import {useAppDispatch, useAppSelector} from '../../redux/store';
+import {clearToken} from '../../redux/redusers/AuthSlice';
 
 interface IFormProps {
   username: string;
   email: string;
   firstName: string;
   lastName: string;
-  gender: 'Male' | 'Female';
+  gender: 'male' | 'female';
   imageUrl: string | null;
   password: string;
 }
 
-export const ProfileScreen = ({navigation}: Props) => {
-  const deleteUser = () => {};
+export const ProfileScreen = () => {
+  const dispatch = useAppDispatch();
+  const deleteUser = () => dispatch(clearToken());
 
-  const headerRight = React.useCallback(
-    () => (
-      <TouchableOpacity onPress={deleteUser}>
-        <Trash />
-      </TouchableOpacity>
-    ),
-    [],
-  );
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight,
-    });
-  }, [headerRight, navigation]);
+  const user = useAppSelector(state => state.auth);
 
   const {control, watch, setValue, handleSubmit} = useForm<IFormProps>({
     defaultValues: {
-      username: '',
-      email: '',
-      firstName: '',
-      lastName: '',
-      gender: 'Male',
-      imageUrl: '',
-      password: '',
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      gender: user.gender,
+      imageUrl: user.image,
     },
   });
 
@@ -54,7 +38,13 @@ export const ProfileScreen = ({navigation}: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Create account</Text>
+      <View style={styles.header}>
+        {<Text style={styles.title}>{user.firstName || 'Hi user'}</Text>}
+        {user.lastName && <Text style={styles.title}>, {user.lastName}</Text>}
+        <TouchableOpacity onPress={deleteUser} style={styles.logout}>
+          <Logout />
+        </TouchableOpacity>
+      </View>
 
       <CircleImage
         imageUrl={watch('imageUrl')}
@@ -79,29 +69,6 @@ export const ProfileScreen = ({navigation}: Props) => {
               onChangeText={onChange}
               icon={<User />}
               placeholder="Username"
-              error={error?.message}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="password"
-          rules={{
-            required: {
-              value: true,
-              message: 'Required field',
-            },
-          }}
-          render={({field: {value, onChange}, fieldState: {error}}) => (
-            <Field
-              containerStyle={styles.field}
-              label="Password"
-              value={value}
-              onChangeText={onChange}
-              icon={<Password />}
-              placeholder="Password"
-              password
               error={error?.message}
             />
           )}
@@ -153,23 +120,25 @@ export const ProfileScreen = ({navigation}: Props) => {
 
         <View style={styles.genderWrapper}>
           <RadioButton
-            label="Male"
+            label="male"
             containerStyle={styles.field}
-            checked={watch('gender') === 'Male'}
-            onPress={() => setValue('gender', 'Male')}
+            checked={watch('gender') === 'male'}
+            onPress={() => setValue('gender', 'male')}
           />
           <RadioButton
-            label="Female"
+            label="female"
             containerStyle={styles.field}
-            checked={watch('gender') === 'Female'}
-            onPress={() => setValue('gender', 'Female')}
+            checked={watch('gender') === 'female'}
+            onPress={() => setValue('gender', 'female')}
           />
         </View>
       </View>
 
-      <View style={styles.footer}>
-        <Button title="Save" onPress={handleSubmit(submit)} />
-      </View>
+      <Button
+        containerStyle={styles.footer}
+        text="Save"
+        onPress={handleSubmit(submit)}
+      />
     </SafeAreaView>
   );
 };
@@ -180,7 +149,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 16,
+  },
   title: {textAlign: 'center', fontSize: 24, lineHeight: 40},
+  logout: {flex: 1, alignItems: 'flex-end'},
   field: {
     marginTop: 16,
   },

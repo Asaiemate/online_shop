@@ -216,6 +216,8 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 4,
     backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: 'lightgray',
   },
   image: {
     borderRadius: 16,

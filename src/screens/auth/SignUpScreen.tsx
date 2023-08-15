@@ -18,7 +18,7 @@ interface IFormProps {
   email: string;
   firstName: string;
   lastName: string;
-  gender: 'Male' | 'Female';
+  gender: 'male' | 'female';
   imageUrl: string | null;
   password: string;
 }
@@ -34,7 +34,7 @@ export const SignUpScreen = ({navigation}: Props) => {
       email: '',
       firstName: '',
       lastName: '',
-      gender: 'Male',
+      gender: 'male',
       imageUrl: '',
       password: '',
     },
@@ -169,16 +169,16 @@ export const SignUpScreen = ({navigation}: Props) => {
 
         <View style={styles.genderWrapper}>
           <RadioButton
-            label="Male"
+            label="male"
             containerStyle={styles.field}
-            checked={watch('gender') === 'Male'}
-            onPress={() => setValue('gender', 'Male')}
+            checked={watch('gender') === 'male'}
+            onPress={() => setValue('gender', 'male')}
           />
           <RadioButton
-            label="Female"
+            label="female"
             containerStyle={styles.field}
-            checked={watch('gender') === 'Female'}
-            onPress={() => setValue('gender', 'Female')}
+            checked={watch('gender') === 'female'}
+            onPress={() => setValue('gender', 'female')}
           />
         </View>
       </View>

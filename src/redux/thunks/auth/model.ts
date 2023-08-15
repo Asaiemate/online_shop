@@ -4,7 +4,7 @@ export interface AuthStateInterface {
   email: string;
   firstName: string;
   lastName: string;
-  gender: string;
+  gender: 'male' | 'female';
   image: string;
   token: string | null;
   status: 'loading' | 'failed' | 'success';
