@@ -5,7 +5,7 @@ export type RootStackParamList = {
   SignUpScreen: undefined;
 
   TabNavigation: undefined;
-  CartScreen: IProduct;
+  CartScreen: undefined;
   ItemScreen: IProduct;
 
   ItemsList: undefined;

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text} from 'react-native';
 
-export const CartList = () => {
+export const CartScreen = () => {
   return <Text>CartList</Text>;
 };

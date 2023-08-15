@@ -5,15 +5,20 @@ import {
   Image,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
+  TextInput,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStackParamList} from '../../navigation/StackParamList';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Cart, Filter} from '../../icons';
 import ReactNativeModal from 'react-native-modal';
+import {addProduct} from '../../redux/redusers/CartSlice';
+import {useAppDispatch, useAppSelector} from '../../redux/store';
+import {CountField} from '../../components/CountField';
+import {Search} from '../../icons/Search';
+import useDebounce from '../../hooks/useDebounce';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ItemsList'>;
 
@@ -34,16 +39,48 @@ export interface IProduct {
 
 export const ItemsList = (props: Props) => {
   const {navigation} = props;
-  const [productList, setProductList] = React.useState<IProduct[]>([]);
   const {width: deviceWidth, height: deviceHeight} = Dimensions.get('screen');
   const imageSize = (deviceWidth - 60) / 2;
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector(state => state.cart);
+
+  const [productList, setProductList] = React.useState<IProduct[]>([]);
+  const [categories, setCategories] = React.useState<string[]>([]);
   const [modal, setModal] = React.useState<boolean>(false);
+  const [search, setSearch] = React.useState<string>('');
 
   const closeModal = () => setModal(false);
 
-  const getProducts = async () => {
+  const getProducts = async (text?: string) => {
     try {
-      const response = await fetch('https://dummyjson.com/products');
+      const response = text
+        ? await fetch(`https://dummyjson.com/products/search?q=${text}`)
+        : await fetch('https://dummyjson.com/products');
+      const responseJSON = await response.json();
+      const products: IProduct[] = responseJSON.products.map(
+        (product: IProduct) => ({...product, count: 1}),
+      );
+      setProductList(products);
+    } catch (err) {
+      console.log('err', err);
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const response = await fetch('https://dummyjson.com/products/categories');
+      const responseJSON = await response.json();
+      setCategories(responseJSON);
+    } catch (err) {
+      console.log('err', err);
+    }
+  };
+
+  const categoryHandle = async (category: string) => {
+    try {
+      const response = await fetch(
+        `https://dummyjson.com/products/category/${category}`,
+      );
       const responseJSON = await response.json();
       const products: IProduct[] = responseJSON.products.map(
         (product: IProduct) => ({...product, count: 0}),
@@ -52,22 +89,21 @@ export const ItemsList = (props: Props) => {
     } catch (err) {
       console.log('err', err);
     }
+    closeModal();
   };
-
-  React.useEffect(() => {
-    console.log('Meow');
-    getProducts();
-  }, []);
 
   const goToItemScreen = (product: IProduct) => {
     navigation.navigate('ItemScreen', product);
   };
 
   const toCart = (product: IProduct) => {
-    navigation.navigate('CartScreen', product);
+    dispatch(addProduct(product));
   };
 
-  const changeCount = (index: number, number: number) => {
+  const changeCount = (number: number, index: number) => {
+    console.log('changeCount');
+    console.log('number', number);
+    console.log('index', index);
     setProductList(list => {
       let temp = [...list];
       temp[index].count = number;
@@ -75,8 +111,35 @@ export const ItemsList = (props: Props) => {
     });
   };
 
+  useDebounce(() => getProducts(search), 1000, [search]);
+
+  React.useEffect(() => {
+    getProducts();
+    getCategories();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.searchWrapper}>
+        <View style={styles.search}>
+          <Search />
+
+          <TextInput
+            style={styles.searchInput}
+            value={search}
+            onChangeText={setSearch}
+          />
+        </View>
+
+        <TouchableOpacity
+          style={styles.headerCart}
+          onPress={() => navigation.navigate('CartScreen')}>
+          <Cart />
+
+          <Text style={styles.cartCount}>{cart.length}</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.header}>
         <Text>Catalog</Text>
         <TouchableOpacity onPress={() => setModal(true)}>
@@ -108,22 +171,13 @@ export const ItemsList = (props: Props) => {
                 <Cart />
               </TouchableOpacity>
             </View>
-            <View style={styles.countWrapper}>
-              <TouchableOpacity
-                onPress={() => changeCount(index, ++item.count)}>
-                <Text style={styles.operator}>+</Text>
-              </TouchableOpacity>
-              <TextInput
-                style={styles.count}
-                keyboardType="numeric"
-                value={item.count.toString()}
-                onChangeText={text => changeCount(index, +text)}
-              />
-              <TouchableOpacity
-                onPress={() => changeCount(index, --item.count)}>
-                <Text style={styles.operator}>—</Text>
-              </TouchableOpacity>
-            </View>
+            <CountField
+              count={item.count}
+              index={index}
+              changeCount={(count, _index) => {
+                return _index === undefined ? null : changeCount(count, _index);
+              }}
+            />
           </TouchableOpacity>
         )}
       />
@@ -135,33 +189,72 @@ export const ItemsList = (props: Props) => {
         onBackButtonPress={closeModal}
         onSwipeComplete={closeModal}
         style={styles.modal}
-        swipeDirection={'up'}
+        swipeDirection={'down'}
         deviceHeight={deviceHeight}
         deviceWidth={deviceWidth}
         propagateSwipe={true}
         backdropTransitionOutTiming={0}>
-        <FlatList
-          style={{backgroundColor: 'red'}}
-          contentContainerStyle={[
-            styles.modalContainer,
-            {height: deviceHeight * 0.9},
-          ]}
-          data={[1, 1, 1]}
-          renderItem={() => <Text>Text</Text>}
-        />
+        <View>
+          <FlatList
+            style={{height: deviceHeight * 0.9}}
+            contentContainerStyle={styles.modalContainer}
+            data={categories}
+            ItemSeparatorComponent={ItemSeparatorComponent}
+            ListHeaderComponent={
+              <Text style={styles.modalTitle}>Категории товаров</Text>
+            }
+            renderItem={({item}) => (
+              <Text
+                style={styles.modalItem}
+                onPress={() => categoryHandle(item)}>
+                {item}
+              </Text>
+            )}
+          />
+        </View>
       </ReactNativeModal>
     </SafeAreaView>
   );
 };
+const ItemSeparatorComponent = () => <View style={styles.separator} />;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  searchWrapper: {flexDirection: 'row'},
+  search: {
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: 'gray',
+    marginHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    flex: 1,
+  },
+  searchInput: {flex: 1},
+  headerCart: {
+    padding: 8,
+    marginRight: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cartCount: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    color: 'white',
+    backgroundColor: 'gray',
+    fontWeight: '900',
+    borderRadius: 4,
+    paddingHorizontal: 2,
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 16,
+    marginTop: 16,
   },
   content: {marginHorizontal: 12},
   item: {
@@ -183,33 +276,26 @@ const styles = StyleSheet.create({
   cart: {
     padding: 4,
   },
-  countWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  operator: {
-    fontSize: 20,
-    backgroundColor: 'lightgray',
-    borderRadius: 4,
-    width: 40,
-    height: 40,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-  },
-  count: {
-    borderWidth: 1,
-    height: 40,
-    borderColor: 'lightgray',
-    marginHorizontal: 2,
-    borderRadius: 4,
-  },
+
   modal: {justifyContent: 'flex-end', margin: 0},
   modalContainer: {
     backgroundColor: 'lightgray',
-    justifyContent: 'flex-end',
     padding: 16,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     minHeight: 100,
+  },
+  modalItem: {
+    padding: 8,
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: 'gray',
+  },
+  modalTitle: {
+    textAlign: 'center',
+    lineHeight: 40,
+  },
+  separator: {
+    height: 10,
   },
 });

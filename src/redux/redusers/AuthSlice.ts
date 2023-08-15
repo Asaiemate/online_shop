@@ -2,7 +2,14 @@ import {createSlice} from '@reduxjs/toolkit';
 import {AuthStateInterface} from '../thunks/auth/model';
 import {SignInThunk, SignUpThunk} from '../thunks/auth';
 
-export const initialState: AuthStateInterface = {
+const initialState: AuthStateInterface = {
+  id: 0,
+  username: '',
+  email: '',
+  firstName: '',
+  lastName: '',
+  gender: '',
+  image: '',
   token: null,
   status: 'success',
 };
@@ -37,6 +44,14 @@ export const authSlice = createSlice({
       state.status = 'loading';
     });
     builder.addCase(SignUpThunk.fulfilled, (state, {payload}) => {
+      state.id = payload.id;
+      state.username = payload.username;
+      state.email = payload.email;
+      state.firstName = payload.firstName;
+      state.lastName = payload.lastName;
+      state.gender = payload.gender;
+      state.image = payload.image;
+      state.token = 'token';
       state.status = 'success';
     });
     builder.addCase(SignUpThunk.rejected, state => {
