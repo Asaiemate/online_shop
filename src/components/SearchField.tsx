@@ -26,6 +26,7 @@ export const SearchField = (props: Props) => {
           .reduce((prev, cur) => prev + cur)
       : 0,
   );
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (

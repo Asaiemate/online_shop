@@ -31,6 +31,13 @@ export const authSlice = createSlice({
     });
     builder.addCase(SignInThunk.fulfilled, (state, {payload}) => {
       if (payload.token) {
+        state.id = payload.id;
+        state.username = payload.username;
+        state.email = payload.email;
+        state.firstName = payload.firstName;
+        state.lastName = payload.lastName;
+        state.gender = payload.gender;
+        state.image = payload.image;
         state.token = payload.token;
         state.status = 'success';
       } else {

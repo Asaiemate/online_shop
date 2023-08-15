@@ -19,7 +19,7 @@ import {CountField} from '../../components';
 import useDebounce from '../../hooks/useDebounce';
 import {SearchField} from '../../components/SearchField';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'ItemsList'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Products'>;
 
 export interface IProduct {
   id: number;
@@ -36,7 +36,7 @@ export interface IProduct {
   count: number;
 }
 
-export const ItemsList = (props: Props) => {
+export const ProductsScreen = (props: Props) => {
   const {navigation} = props;
   const {width: deviceWidth, height: deviceHeight} = Dimensions.get('screen');
   const imageSize = (deviceWidth - 60) / 2;

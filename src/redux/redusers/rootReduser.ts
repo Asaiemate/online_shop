@@ -2,7 +2,7 @@ import {combineReducers} from 'redux';
 import {AuthStateInterface} from '../thunks/auth/model';
 import AuthSlice from './AuthSlice';
 import CartSlice from './CartSlice';
-import {IProduct} from '../../screens/main/ItemsList';
+import {IProduct} from '../../screens/main/ProductsScreen';
 
 export interface RootInterface {
   auth: AuthStateInterface;

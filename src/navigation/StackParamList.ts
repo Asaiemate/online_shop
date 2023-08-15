@@ -1,4 +1,4 @@
-import {IProduct} from '../screens/main/ItemsList';
+import {IProduct} from '../screens/main/ProductsScreen';
 
 export type RootStackParamList = {
   SignInScreen: undefined;
@@ -8,6 +8,6 @@ export type RootStackParamList = {
   CartScreen: undefined;
   ItemScreen: IProduct;
 
-  ItemsList: undefined;
+  Products: undefined;
   Profile: undefined;
 };

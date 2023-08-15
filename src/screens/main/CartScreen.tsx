@@ -2,7 +2,7 @@ import React from 'react';
 import {FlatList, StyleSheet, Text, View, Image} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../redux/store';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ItemSeparatorComponent} from './ItemsList';
+import {ItemSeparatorComponent} from './ProductsScreen';
 import {CountField, Button} from '../../components';
 import {
   changeCount,

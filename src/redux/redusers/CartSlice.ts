@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {IProduct} from '../../screens/main/ItemsList';
+import {IProduct} from '../../screens/main/ProductsScreen';
 
 interface IInitialState {
   cart: IProduct[];

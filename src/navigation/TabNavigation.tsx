@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {ItemsList} from '../screens/main';
+import {ProductsScreen, ProfileScreen} from '../screens/main';
 import {RootStackParamList} from './StackParamList';
 import {List, Profile} from '../icons';
 
@@ -8,11 +8,11 @@ export const TabNavigation = () => {
   const Tab = createBottomTabNavigator<RootStackParamList>();
 
   const ItemsListIcon = React.useCallback((focused: boolean) => {
-    return <List color={focused ? 'blue' : 'black'} />;
+    return <List color={focused ? 'black' : 'gray'} />;
   }, []);
 
   const ProfileIcon = React.useCallback((focused: boolean) => {
-    return <Profile color={focused ? 'blue' : 'black'} />;
+    return <Profile color={focused ? 'black' : 'gray'} />;
   }, []);
 
   return (
@@ -23,20 +23,25 @@ export const TabNavigation = () => {
         tabBarStyle: {
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
-          paddingVertical: 16,
-          hight: 40,
+          paddingVertical: 4,
         },
       })}>
       <Tab.Screen
-        name="ItemsList"
-        component={ItemsList}
-        options={{tabBarIcon: ({focused}) => ItemsListIcon(focused)}}
+        name="Products"
+        component={ProductsScreen}
+        options={{
+          tabBarIcon: ({focused}) => ItemsListIcon(focused),
+          tabBarInactiveTintColor: 'gray',
+          tabBarActiveTintColor: 'black',
+        }}
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({focused}) => ProfileIcon(focused),
+          tabBarInactiveTintColor: 'gray',
+          tabBarActiveTintColor: 'black',
         }}
       />
     </Tab.Navigator>

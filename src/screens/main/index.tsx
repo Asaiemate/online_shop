@@ -1,6 +1,6 @@
 import {CartScreen} from './CartScreen';
 import {ItemScreen} from './ItemScreen';
-import {ItemsList} from './ItemsList';
-import {Profile} from './Profile';
+import {ProductsScreen} from './ProductsScreen';
+import {ProfileScreen} from './ProfileScreen';
 
-export {CartScreen, ItemsList, Profile, ItemScreen};
+export {CartScreen, ProductsScreen, ProfileScreen, ItemScreen};

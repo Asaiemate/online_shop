@@ -20,7 +20,7 @@ interface IFormProps {
   password: string;
 }
 
-export const Profile = ({navigation}: Props) => {
+export const ProfileScreen = ({navigation}: Props) => {
   const deleteUser = () => {};
 
   const headerRight = React.useCallback(
