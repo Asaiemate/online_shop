@@ -11,6 +11,7 @@ export const AuthNavigation = () => {
       screenOptions={{
         statusBarTranslucent: true,
         statusBarColor: 'transparent',
+        statusBarStyle: 'dark',
         headerShown: false,
       }}>
       <Stack.Screen name="SignInScreen" component={SignInScreen} />

@@ -176,6 +176,7 @@ export const ProductsScreen = (props: Props) => {
         backdropTransitionOutTiming={0}>
         <View>
           <FlatList
+            showsVerticalScrollIndicator={false}
             style={{height: deviceHeight * 0.9}}
             contentContainerStyle={styles.modalContainer}
             data={categories}
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
 
   modal: {justifyContent: 'flex-end', margin: 0},
   modalContainer: {
-    backgroundColor: 'lightgray',
+    backgroundColor: 'white',
     padding: 16,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: 'gray',
+    borderColor: 'lightgray',
   },
   modalTitle: {
     textAlign: 'center',

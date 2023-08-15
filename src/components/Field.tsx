@@ -27,7 +27,7 @@ export const Field = ({
   error,
   ...rest
 }: Props) => {
-  const [secureTextEntry, setSecureTextEntry] = React.useState<boolean>(false);
+  const [secureTextEntry, setSecureTextEntry] = React.useState<boolean>(true);
 
   return (
     <View style={[styles.containerStyle, containerStyle]}>
@@ -37,7 +37,7 @@ export const Field = ({
         <TextInput
           {...rest}
           style={styles.input}
-          secureTextEntry={secureTextEntry}
+          secureTextEntry={!!password && secureTextEntry}
         />
         {password === undefined ? null : (
           <TouchableOpacity onPress={() => setSecureTextEntry(pre => !pre)}>

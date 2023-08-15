@@ -29,9 +29,10 @@ export const CircleImage = (props: Props) => {
   const loadImage = async (type: 'camera' | 'library') => {
     try {
       const granted = await PermissionsAndroid.request(
-        type === 'camera'
-          ? PermissionsAndroid.PERMISSIONS.CAMERA
-          : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        // type === 'camera'
+        //   ? PermissionsAndroid.PERMISSIONS.CAMERA
+        //   : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
         {
           title: 'Cool Photo App Camera Permission',
           message:

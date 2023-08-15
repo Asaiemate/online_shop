@@ -33,6 +33,7 @@ export const ItemScreen = (props: Props) => {
       <SafeAreaView style={styles.container}>
         <FlatList
           style={styles.modal}
+          showsHorizontalScrollIndicator={false}
           contentContainerStyle={{height: imageSize}}
           data={product.images}
           renderItem={({item}) => (

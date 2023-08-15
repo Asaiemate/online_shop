@@ -23,6 +23,7 @@ export const CartScreen = () => {
       <FlatList
         data={filterList}
         contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={ItemSeparatorComponent}
         renderItem={({item, index}) => (
           <View style={styles.item}>

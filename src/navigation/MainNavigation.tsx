@@ -13,6 +13,7 @@ export const MainNavigation = () => {
         headerShown: false,
         statusBarTranslucent: true,
         statusBarColor: 'transparent',
+        statusBarStyle: 'dark',
         headerStyle: {backgroundColor: 'red'},
       }}
       initialRouteName="TabNavigation">
