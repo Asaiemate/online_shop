@@ -10,7 +10,7 @@ export const cartSlice = createSlice({
     addProduct: (state, {payload}) => {
       const index = state.findIndex(product => product.id === payload.id);
       if (index >= 0) {
-        state[index].count += payload.count;
+        state[index].count = state[index].count + payload.count;
       } else {
         state.push(payload);
       }

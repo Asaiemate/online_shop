@@ -43,7 +43,9 @@ export const ItemsList = (props: Props) => {
   const imageSize = (deviceWidth - 60) / 2;
   const dispatch = useAppDispatch();
   const cart = useAppSelector(state => state.cart);
-
+  const cartItemCount = cart
+    .map(item => item.count)
+    .reduce((prev, cur) => prev + cur);
   const [productList, setProductList] = React.useState<IProduct[]>([]);
   const [categories, setCategories] = React.useState<string[]>([]);
   const [modal, setModal] = React.useState<boolean>(false);
@@ -101,9 +103,9 @@ export const ItemsList = (props: Props) => {
   };
 
   const changeCount = (number: number, index: number) => {
-    console.log('changeCount');
-    console.log('number', number);
-    console.log('index', index);
+    if (number < 0) {
+      return;
+    }
     setProductList(list => {
       let temp = [...list];
       temp[index].count = number;
@@ -136,7 +138,7 @@ export const ItemsList = (props: Props) => {
           onPress={() => navigation.navigate('CartScreen')}>
           <Cart />
 
-          <Text style={styles.cartCount}>{cart.length}</Text>
+          <Text style={styles.cartCount}>{cartItemCount}</Text>
         </TouchableOpacity>
       </View>
 
