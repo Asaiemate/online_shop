@@ -16,7 +16,7 @@ import {Cart, Filter} from '../../icons';
 import ReactNativeModal from 'react-native-modal';
 import {addProduct} from '../../redux/redusers/CartSlice';
 import {useAppDispatch, useAppSelector} from '../../redux/store';
-import {CountField} from '../../components/CountField';
+import {CountField} from '../../components';
 import {Search} from '../../icons/Search';
 import useDebounce from '../../hooks/useDebounce';
 

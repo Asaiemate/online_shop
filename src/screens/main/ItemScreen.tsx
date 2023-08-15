@@ -15,7 +15,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAppDispatch} from '../../redux/store';
 import {addProduct} from '../../redux/redusers/CartSlice';
 import {Cart} from '../../icons';
-import {CountField} from '../../components/CountField';
+import {CountField} from '../../components';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ItemScreen'>;
 

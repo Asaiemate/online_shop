@@ -2,13 +2,11 @@ import React from 'react';
 import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
-import {Field} from '../../components/Field';
 import {Trash, User} from '../../icons';
 import {Password} from '../../icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/StackParamList';
-import {RadioButton} from '../../components/RadioButton';
-import {CircleImage} from '../../components/CircleImage';
+import {RadioButton, CircleImage, Field} from '../../components';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
 

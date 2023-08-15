@@ -1,9 +1,9 @@
 import React from 'react';
-import {FlatList, StyleSheet, Text, View, Image, Button} from 'react-native';
+import {FlatList, StyleSheet, Text, View, Image} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../redux/store';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ItemSeparatorComponent} from './ItemsList';
-import {CountField} from '../../components/CountField';
+import {CountField, Button} from '../../components';
 import {
   changeCount,
   clearList,
@@ -15,8 +15,7 @@ export const CartScreen = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <SafeAreaView>
-      <Button title="button" onPress={() => dispatch(clearList())} />
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={cart}
         ItemSeparatorComponent={ItemSeparatorComponent}
@@ -45,11 +44,19 @@ export const CartScreen = () => {
           </View>
         )}
       />
+      <Button
+        text="Buy"
+        onPress={() => dispatch(clearList())}
+        containerStyle={styles.button}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   item: {
     borderWidth: 1,
     borderRadius: 16,
@@ -62,5 +69,12 @@ const styles = StyleSheet.create({
   image: {
     borderRadius: 16,
     marginRight: 16,
+  },
+  button: {
+    marginTop: 16,
+    position: 'absolute',
+    bottom: 8,
+    left: 0,
+    right: 0,
   },
 });

@@ -3,7 +3,7 @@ import {Button, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAppDispatch, useAppSelector} from '../../redux/store';
 import {Controller, useForm} from 'react-hook-form';
-import {Field} from '../../components/Field';
+import {Field} from '../../components';
 import {User} from '../../icons';
 import {Password} from '../../icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
