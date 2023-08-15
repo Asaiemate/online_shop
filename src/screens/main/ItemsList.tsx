@@ -42,10 +42,11 @@ export const ItemsList = (props: Props) => {
   const {width: deviceWidth, height: deviceHeight} = Dimensions.get('screen');
   const imageSize = (deviceWidth - 60) / 2;
   const dispatch = useAppDispatch();
-  const cart = useAppSelector(state => state.cart);
-  const cartItemCount = cart
-    .map(item => item.count)
-    .reduce((prev, cur) => prev + cur);
+  const cart = useAppSelector(state => state.cart.cart);
+  const cartItemCount =
+    cart && cart.length > 0
+      ? cart.map(item => item.count).reduce((prev, cur) => prev + cur)
+      : 0;
   const [productList, setProductList] = React.useState<IProduct[]>([]);
   const [categories, setCategories] = React.useState<string[]>([]);
   const [modal, setModal] = React.useState<boolean>(false);
