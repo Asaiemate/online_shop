@@ -218,7 +218,7 @@ export const ItemsList = (props: Props) => {
     </SafeAreaView>
   );
 };
-const ItemSeparatorComponent = () => <View style={styles.separator} />;
+export const ItemSeparatorComponent = () => <View style={styles.separator} />;
 
 const styles = StyleSheet.create({
   container: {
