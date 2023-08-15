@@ -7,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TextInput,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStackParamList} from '../../navigation/StackParamList';
@@ -15,10 +14,10 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Cart, Filter} from '../../icons';
 import ReactNativeModal from 'react-native-modal';
 import {addProduct} from '../../redux/redusers/CartSlice';
-import {useAppDispatch, useAppSelector} from '../../redux/store';
+import {useAppDispatch} from '../../redux/store';
 import {CountField} from '../../components';
-import {Search} from '../../icons/Search';
 import useDebounce from '../../hooks/useDebounce';
+import {SearchField} from '../../components/SearchField';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ItemsList'>;
 
@@ -42,11 +41,7 @@ export const ItemsList = (props: Props) => {
   const {width: deviceWidth, height: deviceHeight} = Dimensions.get('screen');
   const imageSize = (deviceWidth - 60) / 2;
   const dispatch = useAppDispatch();
-  const cart = useAppSelector(state => state.cart.cart);
-  const cartItemCount =
-    cart && cart.length > 0
-      ? cart.map(item => item.count).reduce((prev, cur) => prev + cur)
-      : 0;
+
   const [productList, setProductList] = React.useState<IProduct[]>([]);
   const [categories, setCategories] = React.useState<string[]>([]);
   const [modal, setModal] = React.useState<boolean>(false);
@@ -123,25 +118,7 @@ export const ItemsList = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.searchWrapper}>
-        <View style={styles.search}>
-          <Search />
-
-          <TextInput
-            style={styles.searchInput}
-            value={search}
-            onChangeText={setSearch}
-          />
-        </View>
-
-        <TouchableOpacity
-          style={styles.headerCart}
-          onPress={() => navigation.navigate('CartScreen')}>
-          <Cart />
-
-          <Text style={styles.cartCount}>{cartItemCount}</Text>
-        </TouchableOpacity>
-      </View>
+      <SearchField value={search} onChange={setSearch} cart />
 
       <View style={styles.header}>
         <Text>Catalog</Text>
@@ -225,34 +202,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  searchWrapper: {flexDirection: 'row'},
-  search: {
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: 'gray',
-    marginHorizontal: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 8,
-    flex: 1,
-  },
-  searchInput: {flex: 1},
-  headerCart: {
-    padding: 8,
-    marginRight: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cartCount: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    color: 'white',
-    backgroundColor: 'gray',
-    fontWeight: '900',
-    borderRadius: 4,
-    paddingHorizontal: 2,
-  },
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

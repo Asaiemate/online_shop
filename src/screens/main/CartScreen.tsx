@@ -9,15 +9,20 @@ import {
   clearList,
   deleteProduct,
 } from '../../redux/redusers/CartSlice';
+import {SearchField} from '../../components/SearchField';
 
 export const CartScreen = () => {
   const cart = useAppSelector(state => state.cart.cart);
   const dispatch = useAppDispatch();
+  const [search, setSearch] = React.useState<string>('');
+  const filterList = cart.filter(product => product.title.includes(search));
 
   return (
     <SafeAreaView style={styles.container}>
+      <SearchField value={search} onChange={setSearch} />
       <FlatList
-        data={cart}
+        data={filterList}
+        contentContainerStyle={styles.content}
         ItemSeparatorComponent={ItemSeparatorComponent}
         renderItem={({item, index}) => (
           <View style={styles.item}>
@@ -56,6 +61,10 @@ export const CartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  content: {
+    paddingTop: 24,
+    paddingBottom: 40 + 8 + 16,
   },
   item: {
     borderWidth: 1,
