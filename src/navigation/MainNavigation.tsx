@@ -14,7 +14,6 @@ export const MainNavigation = () => {
         statusBarTranslucent: true,
         statusBarColor: 'transparent',
         statusBarStyle: 'dark',
-        headerStyle: {backgroundColor: 'red'},
       }}
       initialRouteName="TabNavigation">
       <Stack.Screen name="TabNavigation" component={TabNavigation} />

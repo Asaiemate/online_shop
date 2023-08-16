@@ -6,7 +6,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import {Cart, Search} from '../icons';
+import {Back, Cart, Search} from '../icons';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/StackParamList';
 import {useAppSelector} from '../redux/store';
@@ -15,10 +15,11 @@ interface Props {
   value: string;
   onChange: (value: string) => void;
   cart?: boolean;
+  back?: boolean;
 }
 
 export const SearchField = (props: Props) => {
-  const {cart, value, onChange} = props;
+  const {cart, value, onChange, back} = props;
   const cartItemCount = useAppSelector(state =>
     state.cart.cart.length > 0
       ? state.cart.cart
@@ -31,6 +32,13 @@ export const SearchField = (props: Props) => {
 
   return (
     <View style={styles.searchWrapper}>
+      {back ? (
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.back}>
+          <Back />
+        </TouchableOpacity>
+      ) : null}
       <View style={styles.search}>
         <Search />
 
@@ -72,6 +80,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
   },
   searchWrapper: {flexDirection: 'row'},
+  back: {
+    justifyContent: 'center',
+    padding: 8,
+    marginLeft: 16,
+  },
   search: {
     borderWidth: 1,
     borderRadius: 8,

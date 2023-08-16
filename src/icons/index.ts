@@ -1,4 +1,5 @@
 import {AvatarPlaceholder} from './AvatarPlaceholder';
+import {Back} from './Back';
 import {Cart} from './Cart';
 import {Eye} from './Eye';
 import {Filter} from './Filter';
@@ -12,6 +13,7 @@ import {Trash} from './Trash';
 import {User} from './User';
 
 export {
+  Back,
   Logout,
   AvatarPlaceholder,
   Search,

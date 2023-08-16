@@ -19,7 +19,7 @@ export const CartScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <SearchField value={search} onChange={setSearch} />
+      <SearchField value={search} onChange={setSearch} back />
       <FlatList
         data={filterList}
         contentContainerStyle={styles.content}
